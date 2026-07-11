@@ -1,0 +1,49 @@
+import { Metadata } from 'next'
+ 
+export const metadata: Metadata = {
+  title: 'Recommended Tools - Digital Solutions',
+  description: 'The exact tools I use to build websites and grow online businesses for my clients.',
+}
+ 
+export default function ToolsPage() {
+  return (
+    <main className="bg-gray-50 min-h-screen py-10 px-5">
+      <div className="max-w-4xl mx-auto bg-white p-6 md:p-10 rounded-xl shadow-md">
+        <h1 className="text-3xl font-bold text-gray-900 border-b-4 border-indigo-600 pb-3 mb-6">Tools I Use & Recommend</h1>
+        <p className="text-gray-600 mb-6">As a web designer, these are the exact tools I use daily for my clients. They help me deliver professional results fast.</p>
+        
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+          <strong>Affiliate Disclosure:</strong> This page contains affiliate links. I may earn a commission if you purchase through my links, at no extra cost to you. I only recommend tools I personally use and trust.
+        </div>
+
+        <div className="border border-gray-200 rounded-lg p-6 mb-6">
+          <h2 className="text-2xl font-bold mb-2">Shopify <span className="bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs ml-2">E-commerce</span></h2>
+          <p className="mb-2"><strong>Best for:</strong> Anyone who wants to start an online store.</p>
+          <p className="mb-4 text-gray-600">I use Shopify for 90% of my e-commerce clients because it's the easiest way to sell online. No coding needed.</p>
+          <a href="REPLACE_WITH_YOUR_SHOPIFY_AFFILIATE_LINK" target="_blank" className="bg-indigo-600 text-white px-6 py-3 rounded-md font-bold inline-block hover:bg-indigo-700">
+            Try Shopify Free
+          </a>
+        </div>
+
+        <div className="border border-gray-200 rounded-lg p-6 mb-6">
+          <h2 className="text-2xl font-bold mb-2">Canva Pro <span className="bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs ml-2">Design</span></h2>
+          <p className="mb-2"><strong>Best for:</strong> Creating logos, social media posts, and website graphics fast.</p>
+          <p className="mb-4 text-gray-600">I design all my initial logo concepts and client graphics in Canva Pro. The Brand Kit saves me hours every week.</p>
+          <a href="REPLACE_WITH_YOUR_CANVA_LINK" target="_blank" className="bg-indigo-600 text-white px-6 py-3 rounded-md font-bold inline-block hover:bg-indigo-700">
+            Get Canva Pro
+          </a>
+        </div>
+
+        <div className="border border-gray-200 rounded-lg p-6 mb-6">
+          <h2 className="text-2xl font-bold mb-2">Hostinger <span className="bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs ml-2">Web Hosting</span></h2>
+          <p className="mb-2"><strong>Best for:</strong> Fast, cheap hosting for WordPress websites.</p>
+          <p className="mb-4 text-gray-600">For clients who don't need Shopify, I host their WordPress sites on Hostinger. Reliable and costs less than $3/month.</p>
+          <a href="REPLACE_WITH_YOUR_HOSTINGER_LINK" target="_blank" className="bg-indigo-600 text-white px-6 py-3 rounded-md font-bold inline-block hover:bg-indigo-700">
+            Get 80% Off Hosting
+          </a>
+        </div>
+
+      </div>
+    </main>
+  )
+}
