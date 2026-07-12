@@ -1,93 +1,127 @@
-import React from "react";
+"use client"
+import { useState, useEffect } from 'react'
 
-export default function HomePage() {
+export default function AffiliateHubPage() {
+  const [traffic, setTraffic] = useState(5000)
+  const [conversion, setConversion] = useState(2)
+  const [price, setPrice] = useState(120)
+  const [commission, setCommission] = useState(25)
+  const [links, setLinks] = useState<{name:string, url:string}[]>([
+    { name: 'Adobe Creative Cloud', url: 'https://adobe.com/ref?id=user99' }
+  ])
+  const [progName, setProgName] = useState('')
+  const [rawUrl, setRawUrl] = useState('')
+
+  // Load / Save from browser
+  useEffect(() => {
+    const saved = localStorage.getItem('affiliate-links')
+    if (saved) setLinks(JSON.parse(saved))
+  }, [])
+  useEffect(() => {
+    localStorage.setItem('affiliate-links', JSON.stringify(links))
+  }, [links])
+
+  const totalSales = Math.round(traffic * (conversion / 100))
+  const netEarnings = totalSales * price * (commission / 100)
+
+  const addLink = (e: any) => {
+    e.preventDefault()
+    if (!progName ||!rawUrl) return
+    setLinks([...links, { name: progName, url: rawUrl }])
+    setProgName(''); setRawUrl('')
+  }
+
+  const copyLink = (url: string) => {
+    navigator.clipboard.writeText(url)
+    alert('Link copied!')
+  }
+
+  const deleteLink = (index: number) => {
+    setLinks(links.filter((_, i) => i!== index))
+  }
+
+  const exportCSV = () => {
+    const header = "Platform,Affiliate Link\n"
+    const rows = links.map(l => `"${l.name}","${l.url}"`).join("\n")
+    const blob = new Blob([header + rows], { type: 'text/csv' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = `affiliate-links-${new Date().toISOString().slice(0,10)}.csv`
+    a.click()
+  }
+
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 font-sans">
-      {/* Header */}
-      <header className="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-black tracking-wider bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-              DIGITAL SOLUTIONS
-            </span>
-          </div>
-          <nav className="flex gap-6 text-sm font-medium text-slate-400">
-            <a href="#services" className="hover:text-white transition">Services</a>
-            <a href="#about" className="hover:text-white transition">About</a>
-            <a href="#contact" className="hover:text-white transition">Contact</a>
-          </nav>
+    <div className="bg-[#0F172A] text-gray-100 min-h-screen">
+      <nav className="bg-[#1E293B] border-b border-gray-700 px-6 py-4 flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <div className="bg-indigo-600 p-2 rounded-lg font-bold">AI</div>
+          <span className="text-xl font-bold">AffiliateHub <span className="text-indigo-400">AI</span></span>
         </div>
-      </header>
-
-      {/* Hero Section */}
-      <main className="max-w-6xl mx-auto px-4 pt-20 pb-16 text-center">
-        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6">
-          Automate Your Growth. <br />
-          <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
-            Scale Your Business.
+        <div className="flex gap-2">
+          <button onClick={exportCSV} className="bg-gray-700 hover:bg-gray-600 px-4 py-1.5 rounded-full text-xs font-medium">⬇ Export CSV</button>
+          <span className="bg-green-500/10 text-green-400 border border-green-500/20 px-3 py-1 rounded-full text-xs flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span> Live
           </span>
-        </h1>
-        <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-          We build high-converting landing pages, seamless automation workflows, and data-driven marketing strategies to elevate your digital presence.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <a
-            href="#contact"
-            className="px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-white shadow-lg shadow-blue-600/20 transition-all transform hover:-translate-y-0.5"
-          >
-            Get Started Now
-          </a>
-          <a
-            href="#services"
-            className="px-8 py-4 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold text-slate-200 transition-all"
-          >
-            Explore Services
-          </a>
         </div>
-      </main>
+      </nav>
 
-      {/* Services Section */}
-      <section id="services" className="max-w-6xl mx-auto px-4 py-20 border-t border-slate-800">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold mb-4">Our Core Expertise</h2>
-          <p className="text-slate-400 max-w-md mx-auto">Innovative solutions tailored to drive efficiency and maximize revenue.</p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="p-8 rounded-2xl bg-slate-800/50 border border-slate-800 hover:border-slate-700 transition">
-            <div className="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center mb-6 font-bold text-xl">01</div>
-            <h3 className="text-xl font-semibold mb-3">Business Automation</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">Streamline your daily workflows, reduce repetitive overhead, and eliminate human error with smart AI tools.</p>
+      <main className="max-w-7xl mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-1 space-y-6">
+          <div className="bg-[#1E293B] border border-gray-700 rounded-2xl p-6 shadow-xl">
+            <h2 className="font-bold mb-4">🔔 Program Status Monitor</h2>
+            <div className="space-y-3">
+              <div className="p-3 bg-white/5 rounded-xl flex justify-between items-center"><div><h3 className="text-sm font-medium">Canva (Canvassador)</h3><p className="text-xs text-gray-400">Closed Temporarily</p></div><span className="bg-red-500/10 text-red-400 px-2.5 py-1 rounded-md text-xs font-bold">Closed</span></div>
+              <div className="p-3 bg-white/5 rounded-xl flex justify-between items-center"><div><h3 className="text-sm font-medium">Figma Creator</h3><p className="text-xs text-gray-400">Open</p></div><span className="bg-green-500/10 text-green-400 px-2.5 py-1 rounded-md text-xs font-bold">Open</span></div>
+              <div className="p-3 bg-white/5 rounded-xl flex justify-between items-center"><div><h3 className="text-sm font-medium">Adobe CC</h3><p className="text-xs text-gray-400">Open</p></div><span className="bg-green-500/10 text-green-400 px-2.5 py-1 rounded-md text-xs font-bold">Open</span></div>
+            </div>
           </div>
-          <div className="p-8 rounded-2xl bg-slate-800/50 border border-slate-800 hover:border-slate-700 transition">
-            <div className="w-12 h-12 bg-indigo-500/10 text-indigo-400 rounded-xl flex items-center justify-center mb-6 font-bold text-xl">02</div>
-            <h3 className="text-xl font-semibold mb-3">Digital Marketing</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">Target top decision-makers on professional channels, driving targeted traffic straight to optimized landing pages.</p>
-          </div>
-          <div className="p-8 rounded-2xl bg-slate-800/50 border border-slate-800 hover:border-slate-700 transition">
-            <div className="w-12 h-12 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center mb-6 font-bold text-xl">03</div>
-            <h3 className="text-xl font-semibold mb-3">Web Architecture</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">Fast, responsive, and ultra-modern web frameworks optimized natively for SEO and seamless conversions.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="bg-slate-950 border-t border-slate-800 py-20">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Business?</h2>
-          <p className="text-slate-400 mb-8 max-w-lg mx-auto">Let&apos;s collaborate to design custom solutions that accelerate your digital performance and scaling strategy.</p>
-          <div className="p-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl inline-block">
-            <div className="bg-slate-900 px-8 py-4 rounded-2xl font-medium text-slate-200">
-              Contact: <span className="text-blue-400 font-semibold">contact@digitalsolutions.com</span>
+          <div className="bg-gradient-to-br from-indigo-900/30 to-purple-900/30 border border-indigo-500/30 rounded-2xl p-6">
+            <h2 className="font-bold mb-2 text-indigo-300">✨ Smart Alternatives</h2>
+            <p className="text-xs text-gray-400 mb-4">Since <b>Canva is closed</b>, focus on these:</p>
+            <div className="space-y-2 text-xs">
+              <div className="bg-[#1E293B] p-3 rounded-lg flex justify-between"><span>Adobe Express</span><span className="text-indigo-400 font-bold">Paid</span></div>
+              <div className="bg-[#1E293B] p-3 rounded-lg flex justify-between"><span>Kittl - 30% Recurring</span><span className="text-green-400 font-bold">High Value</span></div>
+              <div className="bg-[#1E293B] p-3 rounded-lg flex justify-between"><span>Shopify Affiliate - $150/sale</span><span className="text-green-400 font-bold">Best ROI</span></div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-900 py-8 bg-slate-950 text-center text-xs text-slate-600">
-        <p>&copy; {new Date().getFullYear()} DIGITAL SOLUTIONS. All rights reserved.</p>
-      </footer>
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-[#1E293B] border border-gray-700 rounded-2xl p-6 shadow-xl">
+            <h2 className="text-xl font-bold mb-1">🧮 Earnings Simulator</h2>
+            <div className="grid md:grid-cols-2 gap-6 mt-6">
+              <div className="space-y-4">
+                <div><label className="text-xs text-gray-400">Monthly Traffic</label><input type="number" value={traffic} onChange={e=>setTraffic(Number(e.target.value))} className="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 mt-1" /></div>
+                <div><label className="text-xs text-gray-400">Conversion Rate %</label><input type="number" step="0.1" value={conversion} onChange={e=>setConversion(Number(e.target.value))} className="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 mt-1" /></div>
+                <div><label className="text-xs text-gray-400">Product Price / Year ($)</label><input type="number" value={price} onChange={e=>setPrice(Number(e.target.value))} className="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 mt-1" /></div>
+                <div><label className="text-xs text-gray-400">Your Commission %</label><input type="number" value={commission} onChange={e=>setCommission(Number(e.target.value))} className="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 mt-1" /></div>
+              </div>
+              <div className="bg-[#0F172A] border border-gray-700 rounded-2xl p-6 flex flex-col justify-center text-center">
+                <span className="text-xs text-gray-400 uppercase">Expected Sales</span><h3 className="text-2xl font-bold mt-1">{totalSales.toLocaleString()} sales</h3>
+                <div className="my-6"><span className="text-xs text-indigo-400 uppercase">Net Monthly Earnings</span><h2 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500 mt-1">${netEarnings.toLocaleString()}</h2></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#1E293B] border border-gray-700 rounded-2xl p-6 shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="font-bold">🔗 Link Manager ({links.length})</h2>
+              <button onClick={exportCSV} className="text-xs bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-lg">Export to Excel</button>
+            </div>
+            <form onSubmit={addLink} className="grid md:grid-cols-3 gap-3 mb-6">
+              <input value={progName} onChange={e=>setProgName(e.target.value)} placeholder="Program Name" className="bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2 text-sm" required />
+              <input value={rawUrl} onChange={e=>setRawUrl(e.target.value)} placeholder="https://..." className="bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2 text-sm" required />
+              <button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm py-2 font-medium">+ Save Link</button>
+            </form>
+            <table className="w-full text-xs text-left">
+              <thead><tr className="border-b border-gray-700 text-gray-400"><th className="pb-3">Platform</th><th className="pb-3">Link</th><th className="pb-3 text-right">Actions</th></tr></thead>
+              <tbody className="divide-y divide-gray-700/50">
+                {links.map((l,i)=><tr key={i}><td className="py-3 font-medium">{l.name}</td><td className="py-3 text-gray-400 truncate max-w-[200px]">{l.url}</td><td className="py-3 text-right flex justify-end gap-2"><button onClick={()=>copyLink(l.url)} className="text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded">Copy</button><button onClick={()=>deleteLink(i)} className="text-red-400 bg-red-500/10 px-2 py-1 rounded">Delete</button></td></tr>)}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
     </div>
-  );
+  )
 }
