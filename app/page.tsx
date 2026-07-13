@@ -48,7 +48,7 @@ export default function Home() {
     console.log("Export CSV");
   };
 
-  const addLink = (e: React.FormEvent<HTMLFormElement>) => {) => {
+  const addLink = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (progName && rawUrl) {
       setLinks([...links, { name: progName, url: rawUrl }]);
@@ -58,20 +58,20 @@ export default function Home() {
   };
 
   const handleLike = (id) => {
-    setToolsData(toolsData.map(tool => 
+    setToolsData(toolsData.map(tool =>
       tool.id === id? {...tool, likes: tool.likes + 1 } : tool
     ));
   };
 
   const handleDislike = (id) => {
-    setToolsData(toolsData.map(tool => 
+    setToolsData(toolsData.map(tool =>
       tool.id === id? {...tool, dislikes: tool.dislikes + 1 } : tool
     ));
   };
 
   const handleShare = async (id, toolName) => {
     const url = `https://eclectic-khapse-bff2be.netlify.app/?tool=${toolName}`;
-    
+
     if (navigator.share) {
       try {
         await navigator.share({
@@ -90,7 +90,7 @@ export default function Home() {
   };
 
   const toggleCommentBox = (id) => {
-    setToolsData(toolsData.map(tool => 
+    setToolsData(toolsData.map(tool =>
       tool.id === id? {...tool, showComment:!tool.showComment } : tool
     ));
   };
@@ -100,23 +100,23 @@ export default function Home() {
       alert('عمر الاسم والتعليق عفاك');
       return;
     }
-    
+
     const commentData = {
       id: Date.now(),
       name: userName.trim(),
       text: newComment.trim(),
-      date: new Date().toLocaleDateString('ar-MA', { 
-        year: 'numeric', 
-        month: 'short', 
+      date: new Date().toLocaleDateString('ar-MA', {
+        year: 'numeric',
+        month: 'short',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit'
       })
     };
 
-    setToolsData(toolsData.map(tool => 
-      tool.id === id 
-    ? {...tool, comments: [...tool.comments, commentData], showComment: false } 
+    setToolsData(toolsData.map(tool =>
+      tool.id === id
+   ? {...tool, comments: [...tool.comments, commentData], showComment: false }
         : tool
     ));
     setNewComment('');
@@ -124,13 +124,13 @@ export default function Home() {
 
   const ToolCard = ({ tool, children }) => {
     const toolData = toolsData.find(t => t.id === tool.id);
-    
+
     return (
       <div className="border border-gray-200 rounded-lg overflow-hidden shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white">
         {children}
         <div className="p-5">
           <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
-            <button 
+            <button
               onClick={() => handleLike(tool.id)}
               className="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition active:scale-95"
             >
@@ -138,15 +138,15 @@ export default function Home() {
               <span className="font-bold text-sm">{toolData.likes}</span>
             </button>
 
-            <button 
+            <button
               onClick={() => handleDislike(tool.id)}
               className="flex items-center gap-1 text-gray-600 hover:text-red-600 transition active:scale-95"
             >
               <span className="text-lg">👎</span>
               <span className="font-bold text-sm">{toolData.dislikes}</span>
             </button>
-            
-            <button 
+
+            <button
               onClick={() => toggleCommentBox(tool.id)}
               className="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition active:scale-95"
             >
@@ -154,7 +154,7 @@ export default function Home() {
               <span className="font-bold text-sm">{toolData.comments.length}</span>
             </button>
 
-            <button 
+            <button
               onClick={() => handleShare(tool.id, toolData.name)}
               className="flex items-center gap-1 text-gray-600 hover:text-green-600 transition active:scale-95 relative"
             >
@@ -183,7 +183,7 @@ export default function Home() {
                   className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   onKeyPress={(e) => e.key === 'Enter' && addComment(tool.id)}
                 />
-                <button 
+                <button
                   onClick={() => addComment(tool.id)}
                   className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 active:scale-95"
                 >
