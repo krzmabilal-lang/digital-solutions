@@ -48,14 +48,14 @@ export default function Home() {
     console.log("Export CSV");
   };
 
-  const addLink = (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  if (progName && rawUrl) {
-    setLinks([...links, { name: progName, url: rawUrl }]);
-    setProgName('');
-    setRawUrl('');
-  }
-
+  const addLink = (e: React.FormEvent<HTMLFormElement>) => {) => {
+    e.preventDefault();
+    if (progName && rawUrl) {
+      setLinks([...links, { name: progName, url: rawUrl }]);
+      setProgName('');
+      setRawUrl('');
+    }
+  };
 
   const handleLike = (id) => {
     setToolsData(toolsData.map(tool => 
